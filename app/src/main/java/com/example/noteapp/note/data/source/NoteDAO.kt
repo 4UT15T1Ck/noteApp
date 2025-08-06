@@ -22,4 +22,7 @@ interface NoteDAO {
 
     @Delete
     suspend fun deleteNote(note: Note)
+
+    @Query("UPDATE note SET isExpanded = NOT isExpanded WHERE id = :id")
+    suspend fun toggleNoteExpansion(id: Int)
 }

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.noteapp.ui.theme.LazyFoxFontFamily
 
 @Composable
 fun DefaultRadioButton(
@@ -20,9 +21,9 @@ fun DefaultRadioButton(
     modifier: Modifier = Modifier
 
 ) {
-    Row (
+    Row(
         modifier = modifier,
-        verticalAlignment =  Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(
             selected = selected,
@@ -33,6 +34,10 @@ fun DefaultRadioButton(
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text, style = MaterialTheme.typography.bodySmall)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            fontFamily = LazyFoxFontFamily
+        )
     }
 }

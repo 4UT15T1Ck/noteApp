@@ -18,8 +18,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -34,10 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.noteapp.note.presentation.notes.components.HorizontalLine
 import com.example.noteapp.note.presentation.notes.components.NoteItem
 import com.example.noteapp.note.presentation.notes.components.OrderSection
 import com.example.noteapp.note.presentation.notes.components.RotatingArrowButton
 import com.example.noteapp.note.presentation.util.Screen
+import com.example.noteapp.ui.theme.LazyFoxFontFamily
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -53,18 +55,6 @@ fun NotesScreen(
     val scope = rememberCoroutineScope()
 
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    navController.navigate(Screen.NoteDetailScreen.route)
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add new note",
-                )
-            }
-        },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPadding ->
         Column(
@@ -78,9 +68,20 @@ fun NotesScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                IconButton(
+                    onClick = {
+                        navController.navigate(Screen.NoteDetailScreen.route)
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add new note",
+                    )
+                }
                 Text(
                     text = "NOTES",
                     style = MaterialTheme.typography.titleLarge,
+                    fontFamily = LazyFoxFontFamily
                 )
                 RotatingArrowButton(
                     onClick = {
@@ -93,19 +94,24 @@ fun NotesScreen(
                 enter = fadeIn() + slideInVertically(),
                 exit = fadeOut() + slideOutVertically(),
             ) {
-                OrderSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                    noteOrder = state.noteOrder,
-                    onOrderChange = {
-                        viewModel.onEvent(NotesEvent.Order(it))
-                    }
-                )
+                Column {
+                    HorizontalLine()
+                    OrderSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 16.dp),
+                        noteOrder = state.noteOrder,
+                        onOrderChange = {
+                            viewModel.onEvent(NotesEvent.Order(it))
+                        }
+                    )
+                }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn (
-                modifier = Modifier.fillMaxSize()
+            HorizontalLine()
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
             ) {
                 items(state.notes) { note ->
                     NoteItem(
@@ -115,9 +121,12 @@ fun NotesScreen(
                             .clickable {
                                 navController.navigate(
                                     Screen.NoteDetailScreen.route +
-                                    "?noteId=${note.id}&noteColor=${note.color}"
+                                            "?noteId=${note.id}&noteColor=${note.color}"
                                 )
                             },
+                        onTitleClick = {
+                            viewModel.onEvent(NotesEvent.ToggleNoteExpansion(note.id!!))
+                        },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
                             scope.launch {
@@ -132,7 +141,9 @@ fun NotesScreen(
                             }
                         }
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
+                    HorizontalLine()
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }

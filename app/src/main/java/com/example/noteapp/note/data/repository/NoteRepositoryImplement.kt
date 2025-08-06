@@ -24,4 +24,8 @@ class NoteRepositoryImplement (
     override suspend fun deleteNote(note: Note) {
         return dao.deleteNote(note)
     }
+
+    override suspend fun toggleNoteExpansion(id: Int) {
+        return dao.toggleNoteExpansion(id)
+    }
 }

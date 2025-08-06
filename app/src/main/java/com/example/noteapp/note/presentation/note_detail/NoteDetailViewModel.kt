@@ -35,7 +35,7 @@ class NoteDetailViewModel(
     )
     val noteDescription: State<NoteTextFieldState> = _noteDescription
 
-    private val _noteColor = mutableIntStateOf(Note.noteColor.first().toArgb())
+    private val _noteColor = mutableIntStateOf(Note.noteColor.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -51,11 +51,11 @@ class NoteDetailViewModel(
                         currentNoteId = note.id
                         _noteTitle.value = noteTitle.value.copy(
                             text = note.title,
-                            isHintVisible = false
+                            isHintVisible = note.title.isEmpty()
                         )
                         _noteDescription.value = noteDescription.value.copy(
                             text = note.description,
-                            isHintVisible = false
+                            isHintVisible = note.description.isEmpty()
                         )
                         _noteColor.intValue = note.color
                     }

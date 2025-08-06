@@ -11,6 +11,7 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import com.example.noteapp.ui.theme.LazyFoxFontFamily
 
 @Composable
 fun TransparentTextField(
@@ -41,6 +42,7 @@ fun TransparentTextField(
             Text(
                 text = hint,
                 style = textStyle,
+                fontFamily = LazyFoxFontFamily,
                 color = Color.Gray
             )
         }

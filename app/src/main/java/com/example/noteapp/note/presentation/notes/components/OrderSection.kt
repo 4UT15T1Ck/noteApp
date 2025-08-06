@@ -44,7 +44,9 @@ fun OrderSection(
                 onSelect = { onOrderChange(NoteOrder.Color(noteOrder.orderType)) }
             )
         }
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+        HorizontalLine()
+        Spacer(modifier = Modifier.height(10.dp))
         Row (
             modifier = Modifier.fillMaxWidth()
         ) {

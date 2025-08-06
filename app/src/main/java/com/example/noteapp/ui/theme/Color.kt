@@ -12,7 +12,6 @@ val Pink40 = Color(0xFF7D5260)
 
 val LightRed = Color(0xFFFFCDD2)      // Light Red
 val LightOrange = Color(0xFFFFE0B2)   // Light Orange
-val LightYellow = Color(0xFFFFF9C4)   // Light Yellow
 val LightGreen = Color(0xFFC8E6C9)    // Light Green
 val LightBlue = Color(0xFFBBDEFB)     // Light Blue
 val LightIndigo = Color(0xFFC5CAE9)   // Light Indigo

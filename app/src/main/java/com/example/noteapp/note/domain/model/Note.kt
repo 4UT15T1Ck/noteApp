@@ -8,7 +8,6 @@ import com.example.noteapp.ui.theme.LightIndigo
 import com.example.noteapp.ui.theme.LightOrange
 import com.example.noteapp.ui.theme.LightRed
 import com.example.noteapp.ui.theme.LightViolet
-import com.example.noteapp.ui.theme.LightYellow
 
 @Entity
 data class Note(
@@ -16,10 +15,11 @@ data class Note(
     val description: String,
     val timestamp: Long,
     val color: Int,
+    val isExpanded: Boolean = false,
     @PrimaryKey val id: Int? = null,
 ) {
     companion object {
-        val noteColor = listOf(LightBlue, LightGreen, LightIndigo, LightRed, LightYellow, LightOrange, LightViolet)
+        val noteColor = listOf(LightBlue, LightGreen, LightIndigo, LightRed, LightOrange, LightViolet)
     }
 }
 

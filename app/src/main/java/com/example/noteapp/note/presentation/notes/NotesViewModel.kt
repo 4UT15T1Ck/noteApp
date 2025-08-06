@@ -56,6 +56,11 @@ class NotesViewModel(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
             }
+            is NotesEvent.ToggleNoteExpansion -> {
+                viewModelScope.launch {
+                    noteUseCases.toggleNoteExpansionUseCase(event.id)
+                }
+            }
         }
     }
 

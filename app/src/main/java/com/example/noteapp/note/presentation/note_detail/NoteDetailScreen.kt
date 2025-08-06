@@ -16,14 +16,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,10 +31,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.noteapp.note.domain.model.Note
 import com.example.noteapp.note.presentation.note_detail.components.TransparentTextField
+import com.example.noteapp.note.presentation.notes.components.HorizontalLine
+import com.example.noteapp.ui.theme.LazyFoxFontFamily
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -76,22 +77,11 @@ fun NoteDetailScreen(
     }
 
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.onEvent(NoteDetailEvent.SaveNote)
-                },
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                Icon(imageVector = Icons.Filled.Done, contentDescription = "Save Note")
-            }
-        },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(noteBackgroundAnimatable.value)
                 .padding(innerPadding)
                 .padding(16.dp),
         ) {
@@ -110,9 +100,9 @@ fun NoteDetailScreen(
                             .clip(RoundedCornerShape(30))
                             .background(color)
                             .border(
-                                width = 2.dp,
+                                width = 3.dp,
                                 color = if (viewModel.noteColor.value == colorInt) {
-                                    Color.Black
+                                    MaterialTheme.colorScheme.onBackground
                                 } else Color.Transparent,
                                 shape = RoundedCornerShape(30)
                             )
@@ -130,7 +120,7 @@ fun NoteDetailScreen(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(55.dp))
             TransparentTextField(
                 text = titleState.text,
                 hint = titleState.hint,
@@ -142,23 +132,53 @@ fun NoteDetailScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.titleLarge
+                textStyle = MaterialTheme.typography.titleLarge.merge(
+                    color = noteBackgroundAnimatable.value,
+                    textAlign = TextAlign.Center
+                ),
             )
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalLine()
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(
+                modifier = Modifier
+                    .weight(0.8f)
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(noteBackgroundAnimatable.value)
+                    .padding(20.dp)
+            ) {
+                TransparentTextField(
+                    text = descriptionState.text,
+                    hint = descriptionState.hint,
+                    onValueChange = {
+                        viewModel.onEvent(NoteDetailEvent.EnterDescription(it))
+                    },
+                    onFocusChange = {
+                        viewModel.onEvent(NoteDetailEvent.ChangeDescriptionFocus(it))
+                    },
+                    isHintVisible = descriptionState.isHintVisible,
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
-            TransparentTextField(
-                text = descriptionState.text,
-                hint = descriptionState.hint,
-                onValueChange = {
-                    viewModel.onEvent(NoteDetailEvent.EnterDescription(it))
+            TextButton(
+                onClick = {
+                    viewModel.onEvent(NoteDetailEvent.SaveNote)
                 },
-                onFocusChange = {
-                    viewModel.onEvent(NoteDetailEvent.ChangeDescriptionFocus(it))
-                },
-                isHintVisible = descriptionState.isHintVisible,
-                textStyle = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
-            )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(100))
+                    .background(noteBackgroundAnimatable.value)
 
+            ) {
+                Text(
+                    text = "Done",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontFamily = LazyFoxFontFamily,
+                    color = Color.DarkGray,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
 
     }
